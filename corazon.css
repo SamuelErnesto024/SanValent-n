@@ -1,86 +1,207 @@
 body {
     margin: 0;
+    overflow: hidden;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Estilo del Corazón Central */
+.heart {
+    position: relative;
+    width: 100px;
+    height: 90px;
+    background-color: #ff0040;
+    transform: rotate(-45deg);
+    animation: heartbeat 0.8s infinite secondary;
+    box-shadow: 0 0 40px #ff0040;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: #ff0040;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -50px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: 50px;
+}
+
+/* Animación de Latido */
+@keyframes heartbeat {
+    0% { transform: rotate(-45deg) scale(1); }
+    20% { transform: rotate(-45deg) scale(1.2); }
+    40% { transform: rotate(-45deg) scale(1.1); }
+    60% { transform: rotate(-45deg) scale(1.4); }
+    100% { transform: rotate(-45deg) scale(1); }
+}
+
+/* Fondo de Glitch y Corazones descendentes */
+.glitch-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.falling-heart {
+    position: absolute;
+    color: #ff00ff; /* Color neón/glitch */
+    font-size: 20px;
+    user-select: none;
+    pointer-events: none;
+    filter: drop-shadow(2px 0px #00ffff); /* Efecto glitch cian */
+}
+/* ... (mismo código anterior) ... */
+
+#click-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    color: #ff003c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Flash visual cuando late */
+.heart.pulse {
+    filter: brightness(1.5) drop-shadow(0 0 20px #ff003c);
+}
+
+/* El resto del CSS del mensaje anterior se mantiene igual */
+:root {
+    --primary: #ff0055;
+    --secondary: #00f2ff;
+    --bg: #050505;
+}
+
+body {
+    margin: 0;
+    padding: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #0a0a0a; /* Fondo oscuro para que resalte el glitch */
+    background-color: var(--bg);
+    color: white;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     overflow: hidden;
-    font-family: 'Courier New', Courier, monospace;
 }
 
-/* Efecto Glitch en el fondo */
-.glitch-bg {
-    position: absolute;
+/* Efecto de líneas de TV vieja */
+.scanlines {
+    position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(45deg, #1a0000, #000);
-    z-index: -2;
-    opacity: 0.8;
-}
-
-.glitch-bg::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: repeating-linear-gradient(0deg, rgba(255,0,0,0.05) 0px, rgba(255,0,0,0.05) 1px, transparent 2px, transparent 4px);
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
     pointer-events: none;
+    z-index: 10;
 }
 
-/* El Corazón */
+/* Tarjeta Central */
+.card {
+    position: relative;
+    z-index: 5;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 3rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+}
+
+/* Corazón Profesional */
 .corazon {
     position: relative;
-    width: 100px; height: 90px;
-    background-color: #ff003c;
-    margin: 0 auto 40px;
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary);
     transform: rotate(-45deg);
-    animation: latido 0.6s infinite ease-in-out;
-    filter: drop-shadow(0 0 15px #ff003c);
+    animation: pulse 0.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+    margin: 40px auto;
+    filter: drop-shadow(0 0 20px var(--primary));
+    cursor: pointer;
 }
 
 .corazon::before, .corazon::after {
     content: "";
     position: absolute;
-    width: 100px; height: 100px;
-    background-color: #ff003c;
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary);
     border-radius: 50%;
 }
-.corazon::before { top: -50px; left: 0; }
-.corazon::after { top: 0; left: 50px; }
+.corazon::before { top: -40px; left: 0; }
+.corazon::after { top: 0; left: 40px; }
 
-/* Texto con animación al pasar el mouse */
-.texto-animado {
-    color: #fff;
+/* Glitch Text Animation */
+.glitch-text {
     font-size: 3rem;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s;
+    font-weight: 900;
     position: relative;
+    color: white;
+    letter-spacing: 2px;
 }
 
-.texto-animado:hover {
-    color: #ff003c;
-    letter-spacing: 10px;
-    text-shadow: 3px 3px #0ff, -3px -3px #f0f;
-    transform: scale(1.1);
+.glitch-text:hover {
+    animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
 }
 
-/* Estilo para los corazones que caen */
-.corazon-caido {
+.subtext {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.6;
+    letter-spacing: 1px;
+}
+
+/* Corazones que caen */
+.floating-heart {
     position: absolute;
-    color: #ff003c;
-    font-size: 20px;
-    user-select: none;
+    color: var(--primary);
     pointer-events: none;
-    z-index: -1;
-    animation: caer linear forwards;
+    z-index: 1;
+    filter: drop-shadow(0 0 5px var(--primary));
 }
 
-@keyframes latido {
+@keyframes pulse {
     0% { transform: rotate(-45deg) scale(1); }
-    30% { transform: rotate(-45deg) scale(1.3); }
+    15% { transform: rotate(-45deg) scale(1.2); }
+    30% { transform: rotate(-45deg) scale(1); }
+    45% { transform: rotate(-45deg) scale(1.15); }
     100% { transform: rotate(-45deg) scale(1); }
 }
 
-@keyframes caer {
-    to { transform: translateY(110vh) rotate(360deg); }
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); text-shadow: 2px 0 var(--secondary); }
+    40% { transform: translate(-3px, -3px); text-shadow: -2px 0 var(--primary); }
+    60% { transform: translate(3px, 3px); text-shadow: 2px 0 var(--secondary); }
+    80% { transform: translate(3px, -3px); text-shadow: -2px 0 var(--primary); }
+    100% { transform: translate(0); }
+}
+
+@keyframes fall {
+    to { transform: translateY(105vh) rotate(360deg); }
 }

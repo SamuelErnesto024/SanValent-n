@@ -1,35 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const lluvia = document.getElementById('lluvia');
+    const container = document.getElementById('particles-container');
+    const mainHeart = document.getElementById('corazon');
 
-    function crearCorazon() {
-        const corazon = document.createElement('div');
-        corazon.classList.add('corazon-caido');
+    function createHeart(isExplosion = false) {
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤';
+        heart.className = 'floating-heart';
         
-        // Caracter de corazón aleatorio
-        corazon.innerText = '❤';
+        const size = isExplosion ? Math.random() * 30 + 10 : Math.random() * 20 + 5;
+        heart.style.fontSize = `${size}px`;
         
-        // Posición horizontal aleatoria
-        corazon.style.left = Math.random() * 100 + "vw";
+        const startX = Math.random() * window.innerWidth;
+        heart.style.left = `${startX}px`;
+        heart.style.top = `-50px`;
         
-        // Tamaño aleatorio
-        const size = Math.random() * 20 + 10 + "px";
-        corazon.style.fontSize = size;
+        const duration = Math.random() * 3 + 2;
+        heart.style.animation = `fall ${duration}s linear forwards`;
         
-        // Duración de caída aleatoria (entre 3 y 6 segundos)
-        const duracion = Math.random() * 3 + 3;
-        corazon.style.animationDuration = duracion + "s";
-        
-        // Opacidad aleatoria
-        corazon.style.opacity = Math.random();
+        // Si es explosión, salen del centro
+        if (isExplosion) {
+            heart.style.left = '50vw';
+            heart.style.top = '50vh';
+            heart.style.transition = 'all 0.5s ease-out';
+            setTimeout(() => {
+                heart.style.transform = `translate(${(Math.random()-0.5)*500}px, ${(Math.random()-0.5)*500}px)`;
+                heart.style.opacity = '0';
+            }, 10);
+        }
 
-        lluvia.appendChild(corazon);
+        container.appendChild(heart);
 
-        // Borrar el elemento después de que termine la animación
-        setTimeout(() => {
-            corazon.remove();
-        }, duracion * 1000);
+        setTimeout(() => heart.remove(), duration * 1000);
     }
 
-    // Crear un corazón cada 200ms
-    setInterval(crearCorazon, 200);
+    // Lluvia constante
+    setInterval(() => createHeart(false), 300);
+
+    // Evento de clic profesional
+    mainHeart.addEventListener('click', () => {
+        for(let i=0; i<15; i++) {
+            createHeart(true);
+        }
+        mainHeart.style.filter = 'brightness(1.5) drop-shadow(0 0 30px #fff)';
+        setTimeout(() => {
+            mainHeart.style.filter = 'drop-shadow(0 0 20px var(--primary))';
+        }, 200);
+    });
 });
